@@ -1,0 +1,6 @@
+six
+nose
+sphinx
+flask
+connexion
+

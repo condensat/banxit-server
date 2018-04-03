@@ -1,0 +1,514 @@
+swagger: '2.0'
+info:
+  version: "1.0.2-RC1"
+  title: Sample Application Flow OAuth2 Project
+  description: This is an example of using OAuth2 Application Flow in a specification to describe security to your API.
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /condensat/banxit/1.0.0
+securityDefinitions:
+  banxit_auth:
+    type: oauth2
+    authorizationUrl: http://swagger.io/api/oauth/dialog
+    flow: implicit
+    scopes:
+      write: modify pets in your account
+      read: read your pets
+# Under securityDefinitions we declare which security schemes can be used.
+# These definitions do not affect to the operations, but can be applied
+# using the 'security' key at the global level or the operation level.
+# In this banxit, we'll see how to apply the security definition globally,
+# and override it at the operation level.
+#
+# Note that for Application Flow, you must provide the Token URL.
+#securityDefinitions:
+#  banxit_auth:
+#    type: oauth2
+#    flow: implicit
+#    authorizationUrl: 'https://condensat.tech/oauth/authorize'
+#    tokenUrl: 'http://condensat.tech/oauth/token'
+#    scopes:
+#      write: allows modifying resources
+#      read: allows reading resources
+#  openId:
+#    type: openIdConnect
+#    openIdConnectUrl: https://condensat.tech/.well-known/openid-configuration
+
+# Here we apply the security flow called 'application' globally to all the opeartions in the spec. 
+# This security scheme is defined above in the 'securityDefinitions' section.
+# Global security can be overriden an operation level as seen in the example below
+schemes:
+- "http"
+security:
+  - banxit_auth:
+    - read
+    - write
+paths:
+  /ping:
+    get:
+      summary: Server heartbeat operation
+      description: >-
+        This operation shows how to override the global security defined above,
+        as we want to open it up for all users.
+      security: []
+      responses:
+        '200':
+          description: OK
+  /user:
+    post:
+      tags:
+       - user
+      summary: Creates a user
+      description: This operation creates a user with a valid json form supplied
+      security: [ ]
+      parameters:
+        - in: body
+          name: user
+          required: true
+          description: "user informations"
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        '201':
+          description: Created
+        '429':
+          description: Too many requests
+  /user/login:
+    get:
+      summary: log a user in
+      description: this operation logs a user in with apropriate openid/oauth2 credentials
+      security: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+  /user/{id}/logout:
+    get:
+      summary: log a user out
+      description: this operation logs a user out
+      security: []
+      parameters:
+        - in: path
+          name: "id"
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}:
+    get:
+      summary: retrieve user informations
+      description: retrieve user informations
+      security: []
+      parameters:
+        - in: path
+          name: "id"
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    put:
+      summary: update user informations
+      description: update user informations with a valid json form supplied
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    delete:
+      summary: delete a user
+      description: delete a user
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+  /user/{id}/account:
+    get:
+      summary: retrieve account accounts information
+      description: This operation retrieve the account accounts information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: create an account account
+      description: This operation creates a account account with supplied valid information
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: update a account account
+      description: This operation update a account account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: delete a account account
+      description: This operation delete a account account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/txs:
+    get:
+      summary: retrieve account account information
+      description: This operation retrieve the account account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: create a transaction
+      description: This operation creat a transaction.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/txs/{txid}/:
+    get:
+      summary: retrieve account account information
+      description: This operation retrieve the account account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+        - in: path
+          name: txid
+          required: true
+          description: identifier of the transaction
+          type: integer
+      responses:
+        '200':
+          description: OK
+  /users/{id}/card:
+    get:
+      summary: retrieve card accounts information
+      description: This operation retrieve the card accounts information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: create an card account
+      description: This operation creates a card account with supplied valid information
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: update a card account
+      description: This operation update a card account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: delete a card account
+      description: This operation delete a card account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/card/txs:
+    get:
+      summary: retrieve card account information
+      description: This operation retrieve the card account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: create a transaction
+      description: This operation creat a transaction.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/card/txs/{txid}:
+    get:
+      summary: retrieve card account information
+      description: This operation retrieve the card account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+        - in: path
+          name: txid
+          required: true
+          description: identifier of the transaction
+          type: integer
+      responses:
+        '200':
+          description: OK
+  /user/{id}/crypto:
+    post:
+      summary: create an crypto account
+      description: This operation creates a crypto account with supplied valid information
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    get:
+      summary: retrieve crypto account information
+      description: This operation retrieve the crypto account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: update a crypto account
+      description: This operation update a crypto account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: delete a crypto account
+      description: This operation delete a crypto account.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/crypto/txs:
+    get:
+      summary: retrieve crypto account information
+      description: This operation retrieve the crypto account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: create a transaction
+      description: This operation creat a transaction.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+      responses:
+        '200':
+          description: OK
+  /user/{id}/crypto/txs/{txid}:
+    get:
+      summary: retrieve crypto account information
+      description: This operation retrieve the crypto account information of the user.
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Name of the user to get
+          type: string
+        - in: path
+          name: txid
+          required: true
+          description: identifier of the transaction
+          type: integer
+      responses:
+        '200':
+          description: OK
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+  account:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      iso13616:
+        type: string
+  accounttx:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  Card:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      isoiec7812:
+        type: string
+  Cardtx:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  Crypto:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      address:
+        type: string
+  Cryptotx:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
