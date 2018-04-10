@@ -3,4 +3,6 @@ nose
 sphinx
 flask
 connexion
-
+flask_injector
+mysqlclient
+flask-sqlalchemy

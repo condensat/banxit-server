@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-
-import connexion
-
-from banxit import encoder
+from app.application import create_app
 
 
 def main():
-    app = connexion.App(__name__, specification_dir='../swagger/')
-    app.app.json_encoder = encoder.JSONEncoder
-    app.add_api('swagger.yaml', arguments={'title': 'Sample Application Flow OAuth2 Project'})
+    app = create_app()
     app.run(port=8080)
 
 

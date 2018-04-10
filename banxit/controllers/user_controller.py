@@ -1,8 +1,8 @@
 import connexion
-import six
+from connexion import NoContent
 
+from banxit.app.extensions import db
 from banxit.models.user import User  # noqa: E501
-from banxit import util
 
 
 def user_post(user):  # noqa: E501
@@ -15,6 +15,8 @@ def user_post(user):  # noqa: E501
 
     :rtype: None
     """
+
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    db.session.add(user)
+    return NoContent, 201

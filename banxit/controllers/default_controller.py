@@ -12,7 +12,7 @@ def ping_get():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Working!', 200
 
 
 def user_id_account_delete(id):  # noqa: E501
@@ -294,7 +294,7 @@ def user_id_txs_txid_get(id, txid):  # noqa: E501
     return 'do some magic!'
 
 
-def user_login_get():  # noqa: E501
+def user_login():  # noqa: E501
     """log a user in
 
     this operation logs a user in with apropriate openid/oauth2 credentials # noqa: E501
